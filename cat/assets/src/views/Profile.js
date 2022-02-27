@@ -1,35 +1,36 @@
-import React from "react";
-import { Container, Row, Col } from "reactstrap";
+import React from 'react';
 
-import Highlight from "../components/Highlight";
-import Loading from "../components/Loading";
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
+import { Loading } from '../components';
 
-export const ProfileComponent = () => {
+const Profile = () => {
   const { user } = useAuth0();
+  const { name, picture, email } = user;
 
   return (
-    <Container className="mb-5">
-      <Row className="align-items-center profile-header mb-5 text-center text-md-left">
-        <Col md={2}>
+    <div>
+      <div className="row align-items-center profile-header">
+        <div className="col-md-2 mb-3">
           <img
-            src={user.picture}
+            src={picture}
             alt="Profile"
             className="rounded-circle img-fluid profile-picture mb-3 mb-md-0"
           />
-        </Col>
-        <Col md>
-          <h2>{user.name}</h2>
-          <p className="lead text-muted">{user.email}</p>
-        </Col>
-      </Row>
-      <Row>
-        <Highlight>{JSON.stringify(user, null, 2)}</Highlight>
-      </Row>
-    </Container>
+        </div>
+        <div className="col-md text-center text-md-left">
+          <h2>{name}</h2>
+          <p className="lead text-muted">{email}</p>
+        </div>
+      </div>
+      <div className="row">
+        <pre className="col-12 text-light bg-dark p-4">
+          {JSON.stringify(user, null, 2)}
+        </pre>
+      </div>
+    </div>
   );
 };
 
-export default withAuthenticationRequired(ProfileComponent, {
+export default withAuthenticationRequired(Profile, {
   onRedirecting: () => <Loading />,
 });
